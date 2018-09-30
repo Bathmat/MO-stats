@@ -40,7 +40,7 @@ done
 
 effort=`echo print $shares/$diff*100 | perl`
 
-for((k=0;k<439;k++))
+for((k=0;k<219;k++))
 do
 	let "totalHR += $(echo $histHR | jq -r .[$k].hs2)"
 done

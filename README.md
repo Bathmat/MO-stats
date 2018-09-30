@@ -16,7 +16,7 @@ For automatic usage, set up a task using Windows Task Scheduler and run it as of
 ## Dependencies
 [jq](https://stedolan.github.io/jq/) is required to parse json files. Windows users can install jq using [Chocolatey](https://chocolatey.org/). Instructions are on the [jq download](https://stedolan.github.io/jq/download/) page.
 
-* #### Other info
+#### Other info
 More features will be added in the future.
 
 If you find this useful, donations are always welcome ;)

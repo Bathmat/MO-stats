@@ -34,7 +34,6 @@ diff=0
 
 for((i=0;i<12;i++))
 do
-
 	let "shares += $(eval "cat poolblocks.json | jq '.[$i].shares'")"
 	let "diff += $(eval "cat poolblocks.json | jq '.[$i].diff'")"
 done

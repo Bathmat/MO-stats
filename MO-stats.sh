@@ -14,8 +14,8 @@ blocks="pool/blocks"
 poolstats=$(curl -s $pool$stats)
 poolminer=$(curl -s $pool$miner)
 poolnetwork=$(curl -s $pool$network)
-histHR=$(curl -s $pool$chartHR | jq '.' > hashrate.json)
-Poolblocks=$(curl -s $pool$blocks | jq '.' > poolblocks.json)
+histHR=$(curl -s $pool$chartHR)
+Poolblocks=$(curl -s $pool$blocks)
 
 amtDue=$(echo $poolminer | jq -r '.amtDue')
 Hashrate=$(echo $poolminer | jq -r '.hash2')
@@ -34,15 +34,15 @@ diff=0
 
 for((i=0;i<12;i++))
 do
-	let "shares += $(eval "cat poolblocks.json | jq '.[$i].shares'")"
-	let "diff += $(eval "cat poolblocks.json | jq '.[$i].diff'")"
+	let "shares += $(echo $Poolblocks | jq -r .[$i].shares)"
+	let "diff += $(echo $Poolblocks | jq -r .[$i].diff)"
 done
 
 effort=`echo print $shares/$diff*100 | perl`
 
 for((k=0;k<439;k++))
 do
-	let "totalHR += $(eval "cat hashrate.json | jq '.[$k].hs2'")"
+	let "totalHR += $(echo $histHR | jq -r .[$k].hs2)"
 done
 
 let "k += 1"
@@ -67,9 +67,4 @@ echo BlockXMR:$BlockXMR
 echo effort:$effort
 
 date +"%H:%M" >> $log
-
 echo ' 'XMRdue: $XMRdue, Hashrate: $Hashrate, avgHR: $avgHR, Poolhr: $Poolhr, Pending: $Pending, myHRpercent: $myHRpercent, myPending: $myPending, Nethr: $Nethr, BlockXMR: $BlockXMR, effort: $effort$'\r' >> $log
-
-rm poolblocks.json
-
-rm hashrate.json

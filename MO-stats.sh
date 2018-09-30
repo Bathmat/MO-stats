@@ -4,17 +4,30 @@ log=MO_log_$NOW.txt
 
 wallet="YOURWALLET"
 
-amtDue=$(eval "curl https://api.moneroocean.stream/miner/$wallet/stats | jq '.amtDue'")
+pool="https://api.moneroocean.stream/"
+stats="pool/stats"
+network="network/stats"	
+miner="miner/$wallet/stats"
+chartHR="miner/$wallet/chart/hashrate"
+blocks="pool/blocks"
+
+poolstats=$(curl -s $pool$stats)
+poolminer=$(curl -s $pool$miner)
+poolnetwork=$(curl -s $pool$network)
+histHR=$(curl -s $pool$chartHR | jq '.' > hashrate.json)
+Poolblocks=$(curl -s $pool$blocks | jq '.' > poolblocks.json)
+
+amtDue=$(echo $poolminer | jq -r '.amtDue')
+Hashrate=$(echo $poolminer | jq -r '.hash2')
+Poolhr=$(echo $poolstats | jq -r '.pool_statistics.hashRate')
+Pending=$(echo $poolstats | jq -r '.pool_statistics.pending')
+Netdiff=$(echo $poolnetwork | jq -r '.["18081"].difficulty')
+Blockreward=$(echo $poolnetwork | jq -r '.["18081"].value')
+
 XMRdue=`echo print $amtDue/1000000000000 | perl`
-Hashrate=$(eval "curl https://api.moneroocean.stream/miner/$wallet/stats | jq '.hash2'")
-Poolhr=$(eval "curl https://api.moneroocean.stream/pool/stats | jq '.pool_statistics.hashRate'")
-Pending=$(eval "curl https://api.moneroocean.stream/pool/stats | jq '.pool_statistics.pending'")
-Netdiff=$(eval curl https://api.moneroocean.stream/network/stats | jq '.["18081"].difficulty')
 Nethr=`echo print $Netdiff/120 | perl`
-Blockreward=$(eval curl https://api.moneroocean.stream/network/stats | jq '.["18081"].value')
 BlockXMR=`echo print $Blockreward/1000000000000 | perl`
-histHR=$(eval "curl https://api.moneroocean.stream/miner/$wallet/chart/hashrate | jq '.' > hashrate.json")
-Poolblocks=$(eval "curl https://api.moneroocean.stream/pool/blocks | jq '.' > poolblocks.json")
+
 totalHR=0
 shares=0
 diff=0

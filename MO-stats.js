@@ -25,7 +25,6 @@ async function sendRequest(url) {
     return new Promise (json => {
         request(url, function(error, response, body) {
             if (!error && response.statusCode === 200) {
-                // console.log(body);
                 if (body) {
                     json(JSON.parse(body));
                 }

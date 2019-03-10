@@ -10,6 +10,7 @@ const networkEndpoint = 'network/stats';
 const minerEndpoint = `miner/${wallet}/stats`;
 const hashrateEndpoint = `miner/${wallet}/chart/hashrate`;
 const blocksEndpoint = 'pool/blocks';
+const altblocksEndpoint = 'pool/altblocks';
 
 function logFile() {
     let date = new Date();
@@ -45,6 +46,13 @@ async function checkMO() {
     let shares = 0;
     let diff = 0;
     poolBlocks.forEach(element => {
+        if (Date.now() - element.ts < 24*3600*1000) {
+            shares += element.shares;
+            diff += element.diff;
+        }
+    });
+    let altblocks = await sendRequest(poolAPI+altblocksEndpoint+'/?limit=500');
+    altblocks.forEach(element => {
         if (Date.now() - element.ts < 24*3600*1000) {
             shares += element.shares;
             diff += element.diff;

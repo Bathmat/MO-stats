@@ -41,6 +41,16 @@ async function checkMO() {
     let netStats = await sendRequest(poolAPI+networkEndpoint);
     let blockReward = netStats['18081'].value/1000000000000;
     let netHR = netStats['18081'].difficulty/120/1000000;
+    let poolBlocks = await sendRequest(poolAPI+blocksEndpoint);
+    let shares = 0;
+    let diff = 0;
+    poolBlocks.forEach(element => {
+        if (Date.now() - element.ts < 24*3600*1000) {
+            shares += element.shares;
+            diff += element.diff;
+        }
+    });
+    let effort = shares/diff * 100
     let hashrate = await sendRequest(poolAPI+hashrateEndpoint);
     let totalHR = 0;
     let k = 0;
@@ -53,7 +63,7 @@ async function checkMO() {
     let avgHR = totalHR/k+1;
     let myHRPercent = avgHR/poolStats.pool_statistics.hashRate;
     let myPending = poolStats.pool_statistics.pending*myHRPercent;
-    fs.appendFileSync(logFile(), timeStamp() + ` XMRdue: ${XMRdue}, Hashrate: ${minerStats.hash2}, avgHR: ${avgHR}, PoolHR: ${poolStats.pool_statistics.hashRate/1000000}, Pending: ${poolStats.pool_statistics.pending}, myHRPercent: ${myHRPercent}, myPending: ${myPending}, netHR: ${netHR}, blockReward: ${blockReward}` + '\r');
+    fs.appendFileSync(logFile(), timeStamp() + ` XMRdue: ${XMRdue}, Hashrate: ${minerStats.hash2}, avgHR: ${avgHR}, PoolHR: ${poolStats.pool_statistics.hashRate/1000000}, Pending: ${poolStats.pool_statistics.pending}, myHRPercent: ${myHRPercent}, myPending: ${myPending}, netHR: ${netHR}, blockReward: ${blockReward}, effort: ${effort}` + '\r');
 }
 
 checkMO();

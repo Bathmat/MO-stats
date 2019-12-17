@@ -51,20 +51,24 @@ avgHR=`echo print $totalHR/$k | perl`
 myHRpercent=`echo print $avgHR/$Poolhr | perl`
 myPending=`echo print $Pending*$myHRpercent | perl`
 
-echo i:$i
 
-echo k:$k
-echo avgHR:$avgHR
-echo amtDue:$amtDue
-echo XMRdue:$XMRdue
-echo Hashrate:$Hashrate
-echo Poolhr:$Poolhr
-echo Pending:$Pending
-echo myHRpercent:$myHRpercent
-echo myPending:$myPending
-echo Nethr:$Nethr
-echo BlockXMR:$BlockXMR
-echo effort:$effort
+out=""
+
+out+=i:$i'\n'
+out+=k:$k'\n'
+out+=avgHR:$avgHR'\n'
+out+=amtDue:$amtDue'\n'
+out+=XMRdue:$XMRdue'\n'
+out+=Hashrate:$Hashrate'\n'
+out+=Poolhr:$Poolhr'\n'
+out+=Pending:$Pending'\n'
+out+=myHRpercent:$myHRpercent'\n'
+out+=myPending:$myPending'\n'
+out+=Nethr:$Nethr'\n'
+out+=BlockXMR:$BlockXMR'\n'
+out+=effort:$effort'\n'
+
+echo -e $out | column -t -s :
 
 date +"%H:%M" >> $log
 echo ' 'XMRdue: $XMRdue, Hashrate: $Hashrate, avgHR: $avgHR, Poolhr: $Poolhr, Pending: $Pending, myHRpercent: $myHRpercent, myPending: $myPending, Nethr: $Nethr, BlockXMR: $BlockXMR, effort: $effort$'\r' >> $log

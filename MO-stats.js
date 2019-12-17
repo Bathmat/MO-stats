@@ -14,7 +14,7 @@ const altblocksEndpoint = 'pool/altblocks';
 
 function logFile() {
     let date = new Date();
-    return 'MO-log-'+date.toLocaleDateString()+'.txt';
+    return 'MO-log-'+date.toISOString().slice(0, 10)+'.txt';
 }
 
 function timeStamp() {
